@@ -1,0 +1,44 @@
+.div,
+.div * {
+  box-sizing: border-box;
+}
+
+.div {
+  background: #ffffff;
+  height: 1014px;
+  overflow: hidden;
+
+  /* New Flexbox layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Space between elements */
+}
+
+.img-logo {
+  /* Renamed from ._1 for clarity */
+  width: 360px;
+  height: 365px;
+  object-fit: cover;
+  margin-bottom: 25px; /* Extra space after the logo */
+}
+
+.btn {
+  /* Combined and reusable button styles */
+  background: #658cf6;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  width: 300px;
+  height: 57px;
+  color: #ffffff;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+
+  /* To center text within the button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

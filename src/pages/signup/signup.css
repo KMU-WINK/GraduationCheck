@@ -1,0 +1,153 @@
+/* General Body Styles */
+body {
+  margin: 0;
+  font-family: "Inter-Regular", sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 1024px;
+}
+
+/* Form Container & Wrapper */
+.form-container {
+  width: 700px;
+  min-height: 800px;
+  border: 1px solid #4d4d4d;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.signup-form {
+  width: 100%;
+  max-width: 530px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center form elements like the button */
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 50px;
+}
+
+/* Form Rows and Labels */
+.form-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-row label {
+  font-size: 20px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 8px;
+  align-self: flex-start; /* Align labels to the left */
+}
+
+/* Inputs and Input Wrappers */
+input[type="text"],
+input[type="password"] {
+  background: #e9eefc;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  height: 56px;
+  width: 100%;
+  padding: 0 15px;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper .dropdown-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 15px;
+  pointer-events: none; /* Make arrow non-interactive */
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-group input {
+  width: 100%; /* Flex will handle sizing */
+}
+.input-group span {
+  font-size: 20px;
+}
+
+/* Submit Button */
+.submit-btn {
+  background: #658cf6;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  width: 300px;
+  height: 57px;
+  color: #ffffff;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+/* Styling for the new select element */
+select#department {
+  /* Appearance reset to hide default OS styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Inherit styles from the input elements */
+  background: #e9eefc;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  height: 56px;
+  width: 100%;
+  padding: 0 15px;
+  font-size: 18px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* If the placeholder option is selected, make the text gray */
+select#student:invalid {
+  color: #666;
+}
+
+/* Styling for the new select element */
+select#student-id-year {
+  /* Appearance reset to hide default OS styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Inherit styles from the input elements */
+  background: #e9eefc;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  height: 56px;
+  width: 100%;
+  padding: 0 15px;
+  font-size: 18px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
