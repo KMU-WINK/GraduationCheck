@@ -1,5 +1,5 @@
 import React from 'react';
-import './mypage.css';
+import './editpage.css';
 
 const h = React.createElement;
 
