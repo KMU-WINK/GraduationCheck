@@ -3,7 +3,6 @@ import './mypage.css';
 
 const h = React.createElement;
 
-/* gc-style primitives (페이지 로컬) */
 const Button = ({ children, variant = 'primary', size, onClick, disabled }) =>
   h('button', {
     className: `btn ${variant === 'outline' ? 'btn-outline' : variant === 'ghost' ? 'btn-ghost' : 'btn-primary'} ${size === 'sm' ? 'btn-sm' : ''}`,
@@ -18,35 +17,49 @@ const CardContent = ({ children, className }) => h('div', { className: `card-con
 const FieldRow = ({ label, value }) =>
   h('div', { className: 'gc-item-row' }, [
     h('span', { className: 'gc-text-muted' }, label),
-    h('span', null, value || '-')
+    h('span', null, value ?? '-')
   ]);
+
+function getToken() {
+  return localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+}
+
+function authHeaders() {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 export default function MyPage({ onEdit }) {
   const { useEffect, useState } = React;
+
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState('');
   const [info, setInfo]       = useState({
-    department: '', major: '', name: '', year: '',
-    studentId: '', gpa: '', progress: ''
+    studentId: '', name: '',
+    department: '', admissionYear: '', averageGrade: null
   });
 
   useEffect(() => {
     (async () => {
       try {
-        const res  = await fetch('/api/user-info', { credentials: 'include' });
-        if (!res.ok) throw new Error('failed');
+        const res = await fetch('/api/users/me', {
+          method: 'GET',
+          headers: { ...authHeaders() }
+        });
+        if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
+        if (!res.ok) throw new Error('FETCH_FAILED');
         const data = await res.json();
         setInfo({
-          department: data.department || '',
-          major     : data.major      || '',
-          name      : data.name       || '',
-          year      : data.year       || '',
-          studentId : data.studentId  || '',
-          gpa       : data.gpa ?? '',
-          progress  : data.progress ?? ''
+          studentId: data.studentId ?? '',
+          name: data.name ?? '',
+          department: data.department ?? '',
+          admissionYear: (typeof data.admissionYear === 'number' || typeof data.admissionYear === 'string')
+            ? String(data.admissionYear).replace(/^Y/, '')
+            : '',
+          averageGrade: data.averageGrade ?? null
         });
       } catch (e) {
-        setError('내 정보를 불러오는 데 실패했습니다.');
+        setError(e.message === 'UNAUTHORIZED' ? '로그인이 필요합니다.' : '내 정보를 불러오는 데 실패했습니다.');
       } finally {
         setLoading(false);
       }
@@ -63,13 +76,11 @@ export default function MyPage({ onEdit }) {
           loading && h('div', { className: 'gc-text-muted' }, '불러오는 중...'),
           error   && h('div', { className: 'gc-text-muted' }, error),
           (!loading && !error) && [
-            h(FieldRow, { key: 'dep',   label: '학과',     value: info.department }),
-            h(FieldRow, { key: 'major', label: '전공',     value: info.major }),
-            h(FieldRow, { key: 'name',  label: '이름',     value: info.name }),
-            h(FieldRow, { key: 'year',  label: '입학년도', value: info.year }),
             h(FieldRow, { key: 'sid',   label: '학번',     value: info.studentId }),
-            h(FieldRow, { key: 'gpa',   label: '평균학점', value: info.gpa }),
-            h(FieldRow, { key: 'prog',  label: '졸업요건 진행률', value: info.progress })
+            h(FieldRow, { key: 'name',  label: '이름',     value: info.name }),
+            h(FieldRow, { key: 'dept',  label: '학과',     value: info.department }),
+            h(FieldRow, { key: 'year',  label: '입학년도', value: info.admissionYear }),
+            h(FieldRow, { key: 'avg',   label: '평균학점', value: info.averageGrade ?? '-' })
           ],
           h('div', null, h(Button, { variant: 'primary', onClick: goEdit }, '수정하기'))
         ])
