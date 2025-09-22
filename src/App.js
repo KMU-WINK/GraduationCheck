@@ -16,7 +16,7 @@ function App() {
       <Route path="/Signup" element={<Signup />} />
 <<<<<<< HEAD
       <Route path="/Mypage" element={<Mypage />} />
-      <Route path="/MypageEdit" element={<MypageEdit />} />  
+      <Route path="/MypageEdit" element={<MypageEdit />} />
       <Route path="/Checklist" element={<Checklist />} />
 =======
       <Route path="/Mypage" element={<Mypage onEdit={() => navigate("/MypageEdit")} />} />
