@@ -5,6 +5,15 @@ import "./checklist.css";
 
 const h = React.createElement;
 
+const token = localStorage.getItem('token');
+
+if (token) {
+    axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
+} else {
+    console.error("인증 토큰이 없습니다. 로그인이 필요합니다.");
+}
+
+
 /* ================== axios 전역 설정 ================== */
 axios.defaults.baseURL = "https://api.graduation-check.wink.io.kr";
 axios.defaults.withCredentials = true; // 세션/쿠키 필요 시 필수
