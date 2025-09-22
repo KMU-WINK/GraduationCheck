@@ -1,24 +1,7 @@
 import React from 'react';
-import './editpage.css';
+import styles from './editpage.module.css';
 
 const h = React.createElement;
-
-const Button = ({ children, variant = 'primary', size, onClick, disabled }) =>
-  h('button', {
-    className: `btn ${variant === 'outline' ? 'btn-outline' : variant === 'ghost' ? 'btn-ghost' : 'btn-primary'} ${size === 'sm' ? 'btn-sm' : ''}`,
-    onClick, disabled
-  }, children);
-
-const Card        = ({ children })            => h('div', { className: 'card' }, children);
-const CardHeader  = ({ children })            => h('div', { className: 'card-header' }, children);
-const CardTitle   = ({ children })            => h('div', { className: 'card-title' }, children);
-const CardContent = ({ children, className }) => h('div', { className: `card-content${className ? ' ' + className : ''}` }, children);
-
-const FieldRow = ({ label, right }) =>
-  h('div', { className: 'gc-item-row' }, [
-    h('span', { className: 'gc-text-muted' }, label),
-    right
-  ]);
 
 function getToken() {
   return localStorage.getItem('token') || sessionStorage.getItem('token') || '';
@@ -28,10 +11,7 @@ function authHeaders() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-const DEPARTMENTS = [
-  'SOFTWARE',
-  'AI'
-];
+const DEPARTMENTS = ['SOFTWARE','AI'];
 
 function toApiAdmissionYear(val) {
   const y = String(val || '').replace(/[^0-9]/g, '');
@@ -41,8 +21,10 @@ function toApiAdmissionYear(val) {
 export default function EditPage({ onCancel, onSaved }) {
   const { useEffect, useState } = React;
 
-  const [form, setForm]       = useState({ name:'', department:'', admissionYear:'', averageGrade:'' });
-  const [error, setError]     = useState('');
+  const [form, setForm] = useState({
+    studentId:'', name:'', department:'', admissionYear:'', averageGrade:''
+  });
+  const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -53,11 +35,13 @@ export default function EditPage({ onCancel, onSaved }) {
         if (!res.ok) throw new Error('FETCH_FAILED');
         const data = await res.json();
         setForm({
+          studentId: data.studentId ?? '',
           name: data.name ?? '',
           department: data.department ?? '',
-          admissionYear: (typeof data.admissionYear === 'number' || typeof data.admissionYear === 'string')
-            ? String(data.admissionYear).replace(/^Y/, '')
-            : '',
+          admissionYear:
+            (typeof data.admissionYear === 'number' || typeof data.admissionYear === 'string')
+              ? String(data.admissionYear).replace(/^Y/, '')
+              : '',
           averageGrade: data.averageGrade ?? ''
         });
       } catch (e) {
@@ -88,7 +72,6 @@ export default function EditPage({ onCancel, onSaved }) {
       });
       if (res.status === 401 || res.status === 403) throw new Error('UNAUTHORIZED');
       if (!res.ok) throw new Error('SAVE_FAILED');
-
       if (typeof onSaved === 'function') onSaved();
     } catch (e) {
       setError(e.message === 'UNAUTHORIZED' ? '로그인이 필요합니다.' : '저장 중 오류가 발생했습니다.');
@@ -98,40 +81,66 @@ export default function EditPage({ onCancel, onSaved }) {
 
   const cancel = () => (typeof onCancel === 'function') ? onCancel() : null;
 
-  return h('div', { className: 'gc-page' },
-    h('div', { className: 'gc-container' },
-      h(Card, null, [
-        h(CardHeader, null, h(CardTitle, null, '정보 수정')),
-        h(CardContent, { className: 'gc-space-y-8' }, [
-          error && h('div', { className: 'gc-text-muted' }, error),
+  return h('div', { className: styles.div },
+    h('div', { className: styles.title }, '정보 수정'),
 
-          h(FieldRow, {
-            label: '이름',
-            right: h('input', { className: 'input', value: form.name, onChange: set('name'), placeholder: '이름' })
-          }),
-          h(FieldRow, {
-            label: '학과',
-            right: h('select', { className: 'input', value: form.department, onChange: set('department') }, [
-              h('option', { value: '' }, '학과 선택'),
-              ...DEPARTMENTS.map((d) => h('option', { key: d, value: d }, d))
-            ])
-          }),
-          h(FieldRow, {
-            label: '입학년도',
-            right: h('input', { className: 'input', value: form.admissionYear, onChange: set('admissionYear'), placeholder: '예: 2024' })
-          }),
-          h(FieldRow, {
-            label: '평균학점',
-            right: h('input', { className: 'input', value: form.averageGrade ?? '', onChange: set('averageGrade'), placeholder: '예: 4.0' })
-          }),
+    /* 라벨 */
+    h('div', { className: styles.labelDept }, '학과 :'),
+    h('div', { className: styles.labelSid  }, '학번 :'),
+    h('div', { className: styles.labelName }, '이름 :'),
+    h('div', { className: styles.labelAvg  }, '평균학점 :'),
 
-          h('div', { className: 'gc-flex gc-gap-16' }, [
-            h(Button, { variant: 'outline', onClick: cancel }, '취소'),
-            h(Button, { variant: 'primary', onClick: submit, disabled: submitting }, submitting ? '저장 중...' : '저장')
-          ])
-        ])
-      ])
-    )
+    /* 입력 박스 (⭐ 반드시 styles.box + 위치 클래스 동시 적용) */
+    h('div', { className: `${styles.box} ${styles.boxDept}` },
+      h('select', { className: styles.select, value: form.department, onChange: set('department') },
+        [
+          h('option', { key: 'none', value: '' }, '학과 선택'),
+          ...DEPARTMENTS.map(d => h('option', { key: d, value: d }, d))
+        ]
+      )
+    ),
+    h('div', { className: `${styles.box} ${styles.boxSid}` },
+      h('input', {
+        className: styles.input,
+        value: form.studentId || '',
+        readOnly: true,
+        disabled: true,
+        'aria-label': '학번'
+      })
+    ),
+    h('div', { className: `${styles.box} ${styles.boxYear}` },
+      h('input', {
+        className: styles.input,
+        value: form.admissionYear,
+        onChange: set('admissionYear'),
+        placeholder: '입학년도 (예: 2025)',
+        inputMode: 'numeric'
+      })
+    ),
+    h('div', { className: `${styles.box} ${styles.boxName}` },
+      h('input', {
+        className: styles.input,
+        value: form.name,
+        onChange: set('name'),
+        placeholder: '이름'
+      })
+    ),
+    h('div', { className: `${styles.box} ${styles.boxAvg}` },
+      h('input', {
+        className: styles.input,
+        value: form.averageGrade ?? '',
+        onChange: set('averageGrade'),
+        placeholder: '평균학점 (예: 4.0)'
+      })
+    ),
+
+    /* 에러 */
+    error && h('div', { key: 'error', className: styles.error }, String(error)),
+
+    /* 버튼 */
+    h('button', { className: `${styles.btn} ${styles.btnCancel}`, type: 'button', onClick: cancel }, '취소'),
+    h('button', { className: `${styles.btn} ${styles.btnSave}`,   type: 'button', onClick: submit, disabled: submitting },
+      submitting ? '저장 중...' : '저장'
+    ),
   );
 }
-
