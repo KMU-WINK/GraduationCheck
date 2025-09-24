@@ -7,6 +7,7 @@ const h = React.createElement;
 
 const token = localStorage.getItem('token');
 
+
 if (token) {
     axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
 } else {
@@ -14,22 +15,36 @@ if (token) {
 }
 
 
-/* ================== axios 전역 설정 ================== */
 axios.defaults.baseURL = "https://api.graduation-check.wink.io.kr";
-axios.defaults.withCredentials = true; // 세션/쿠키 필요 시 필수
+axios.defaults.withCredentials = true;
 
-/* ================== 설정 ================== */
-const USER_ID = "20241234"; // 필요 시 실제 사용자 ID로 교체
+
+const USER_ID = "20241234";
 
 /* ================== 전공필수: 고정 목록(서버가 주면 대체) ================== */
 const REQUIRED_COURSES = [
-    { id: 1, name: "소프트웨어학개론", code: "1-1", credits: 3, completed: false, category: "major", subcategory: "required" },
+    { id: 1, name: "소프트웨어학개론", code: "1-1", credits: 3, completed: false,  category: "major", subcategory: "required" },
     { id: 2, name: "프로그래밍기초",   code: "1-1", credits: 3, completed: false, category: "major", subcategory: "required" },
     { id: 3, name: "자료구조",         code: "1-2", credits: 3, completed: false, category: "major", subcategory: "required" },
     { id: 4, name: "알고리즘",         code: "2-1", credits: 3, completed: false, category: "major", subcategory: "required" },
     { id: 5, name: "데이터베이스",     code: "2-2", credits: 3, completed: false, category: "major", subcategory: "required" },
     { id: 6, name: "운영체제",         code: "3-1", credits: 3, completed: false, category: "major", subcategory: "required" },
 ];
+
+/* ================== 서버 분류 매핑 ================== */
+const mapClassification = (name = "") => {
+    const key = String(name).toUpperCase().trim();
+
+    if (key === "REQUIRED")   return { category: "major",  subcategory: "required" };
+    if (key === "SELECTIVE")  return { category: "major",  subcategory: "elective" };
+    if (key === "BASIC")      return { category: "liberal", subcategory: "basic" };
+    if (key === "GENERAL")    return { category: "general", subcategory: null };
+    if (key === "LIBERAL")    return { category: "liberal", subcategory: "free" };
+
+    if (/^CORE[1-5]$/.test(key)) return { category: "liberal", subcategory: "core" };
+
+    return { category: "general", subcategory: null };
+};
 
 /* ================== 공용 UI ================== */
 const Progress = ({ value, small }) =>
@@ -84,9 +99,6 @@ function Checklist() {
     // 동기화 상태
     const [syncing, setSyncing] = useState(false);
 
-    // 추가 타겟(어느 박스에 넣을지)
-    const [addTarget, setAddTarget] = useState({ category: "general", subcategory: null });
-
     /* ---------- 서버 → 프론트 매핑 ---------- */
     const mapBoxItemToCourse = (item) => {
         const userSubjectId = item.userSubjectId ?? item.user_subject_id ?? item.id;
@@ -94,8 +106,8 @@ function Checklist() {
         const subjectName   = item.subjectName   ?? item.subject_name ?? item.name;
         const credit        = item.credit        ?? item.credits ?? 0;
         const semester      = item.semester      ?? item.code ?? "";
-        const category      = item.category      ?? "general";
-        const subcategory   = item.subcategory   ?? undefined;
+        const { category, subcategory } = mapClassification(item.courseClassificationName);
+
 
         return {
             id: userSubjectId || subjectId || Math.random(),
@@ -125,13 +137,12 @@ function Checklist() {
             })
             .catch((err) => {
                 console.error("GET /user/box 실패:", err);
-                // 서버가 막혀도 최소 전공필수 기본값은 보이도록
                 if (courses.length === 0) setCourses([...requiredFallback]);
             })
             .finally(() => setSyncing(false));
     };
 
-    useEffect(() => { fetchUserBox(); /* mount 시 1회 */ }, []);
+    useEffect(() => { fetchUserBox(); }, []);
 
     /* ---------- 검색(디바운스 300ms) ---------- */
     useEffect(() => {
@@ -162,11 +173,12 @@ function Checklist() {
     }, [searchQuery]);
 
     /* ---------- 추가/삭제/체크 ---------- */
-
     // 검색 결과에서 추가
     const addCourseFromSearch = (result) => {
         const subjectId = result.subjectId ?? result.subject_id ?? result.id;
         if (!subjectId) return;
+
+        const { category, subcategory } = mapClassification(result.courseClassificationName);
 
         const tempId = `temp-${Date.now()}`;
         const tempCourse = {
@@ -175,19 +187,17 @@ function Checklist() {
             code: result.semester ?? "",
             credits: Number(result.credit ?? result.credits ?? 0),
             completed: false,
-            category: addTarget.category,
-            subcategory: addTarget.subcategory ?? undefined,
+            category,
+            subcategory,
             _backend: { subjectId }
         };
 
-        // 낙관적 추가
         setCourses(prev => [...prev, tempCourse]);
 
         axios.post(`/user/box/${subjectId}`)
             .then(() => fetchUserBox())         // 실제 ID 반영 위해 재조회
             .catch((err) => {
                 console.error("POST /user/box/{subjectId} 실패:", err);
-                // 롤백
                 setCourses(prev => prev.filter(c => c.id !== tempId));
             })
             .finally(() => {
@@ -337,17 +347,6 @@ function Checklist() {
             h(Card, null,
                 h(CardContent, null, [
                     h("div", { className: "gc-flex gc-items-center gc-gap-12 gc-mb-8" }, [
-                        h("select", {
-                            className: "input",
-                            value: JSON.stringify(addTarget),
-                            onChange: (e) => setAddTarget(JSON.parse(e.target.value))
-                        }, [
-                            h("option", { value: JSON.stringify({ category: "general" }) }, "일반선택"),
-                            h("option", { value: JSON.stringify({ category: "major",  subcategory: "elective" }) }, "전공선택"),
-                            h("option", { value: JSON.stringify({ category: "liberal", subcategory: "basic" }) }, "기초교양"),
-                            h("option", { value: JSON.stringify({ category: "liberal", subcategory: "core"  }) }, "핵심교양"),
-                            h("option", { value: JSON.stringify({ category: "liberal", subcategory: "free"  }) }, "자유교양"),
-                        ])
                     ]),
 
                     h("div", { className: "gc-search" }, [
