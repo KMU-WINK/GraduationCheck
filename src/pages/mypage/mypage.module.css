@@ -16,14 +16,13 @@
   /* outline: 1px solid red; */
 }
 
-html, body { min-width: 1440px; }
 
-.div {
-  background: #ffffff;
-  height: 1024px;
-  position: relative;
-  overflow: hidden;
-}
+/*.div {*/
+/*  background: #ffffff;*/
+/*  height: 1024px;*/
+/*  position: relative;*/
+/*  overflow: hidden;*/
+/*}*/
 
 /* 라벨들 */
 .div2,

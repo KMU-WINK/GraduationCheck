@@ -79,7 +79,7 @@
 }
 
 /* 버튼 */
-.btn{
+.editBtn{
   position:absolute;
   width:150px; height:56px;
   border-radius:10px;
@@ -98,4 +98,4 @@
   background:#fff; color:#111827;
 }
 .btnCancel:hover{ background:#f3f4f6; }
-.btn:focus{ outline:3px solid rgba(101,140,246,.35); outline-offset:2px; }
+.editBtn:focus{ outline:3px solid rgba(101,140,246,.35); outline-offset:2px; }

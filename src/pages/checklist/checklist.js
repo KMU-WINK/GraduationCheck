@@ -1,7 +1,7 @@
-// src/checklist.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./checklist.css";
+import {useNavigate} from "react-router-dom";
 
 const h = React.createElement;
 
@@ -61,6 +61,7 @@ const SearchIcon = () => h("span", { className: "gc-search-icon" }, "🔍");
 function Checklist() {
     /* ---- 상태 ---- */
     const [courses, setCourses] = useState([]);
+    const navigate = useNavigate();
     const [requiredFallback] = useState(REQUIRED_COURSES);
 
     const [graduationRequirements, setGraduationRequirements] = useState([
@@ -307,13 +308,21 @@ function Checklist() {
 
     /* ---------- 렌더 ---------- */
     return h("div", { className: "gc-page" },
-        h("div", { className: "gc-container" }, [
+        h("div", { className: "gc-container-full" }, [
 
             // Student Info + Progress
             h(Card, null,
                 h(CardContent, null, [
                     h("div", { className: "gc-flex gc-justify-between gc-items-center gc-mb-16" }, [
-                        h("h2", { className: "gc-h2" }, "소프트웨어학부 20241234"),
+                        h("h2", {
+                                className: "gc-h2 gc-link",
+                                role: "button",
+                                tabIndex: 0,
+                                onClick: () => navigate("/mypage"),
+                                onKeyDown: (e) => { if (e.key === "Enter" || e.key === " ") navigate("/mypage"); }
+                            },
+                            "소프트웨어학부 20241234"
+                        ),
                         h(Button, { variant: "primary" }, syncing ? "동기화 중..." : "로그아웃")
                     ]),
                     h("div", { className: "gc-flex gc-items-center gc-gap-16" }, [

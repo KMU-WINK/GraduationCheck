@@ -138,8 +138,8 @@ export default function EditPage({ onCancel, onSaved }) {
     error && h('div', { key: 'error', className: styles.error }, String(error)),
 
     /* 버튼 */
-    h('button', { className: `${styles.btn} ${styles.btnCancel}`, type: 'button', onClick: cancel }, '취소'),
-    h('button', { className: `${styles.btn} ${styles.btnSave}`,   type: 'button', onClick: submit, disabled: submitting },
+    h('button', { className: `${styles.editBtn} ${styles.btnCancel}`, type: 'button', onClick: cancel }, '취소'),
+    h('button', { className: `${styles.editBtn} ${styles.btnSave}`,   type: 'button', onClick: submit, disabled: submitting },
       submitting ? '저장 중...' : '저장'
     ),
   );

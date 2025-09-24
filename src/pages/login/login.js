@@ -10,7 +10,7 @@ const Login = () => {
 
   // 입력 받을값을 state로 관리
   const [studentId, setStudentId] = useState("");
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
 
@@ -46,42 +46,44 @@ const Login = () => {
 
 
   return (
-    <div className="form-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h1>Login to Account</h1>
+      <div className="login-page">
+        <div className="form-container">
+          <form className="login-form" onSubmit={handleSubmit}>
+            <h1>Login to Account</h1>
 
-        <div className="form-row">
-          <label htmlFor="student-id">학번</label>
-          <input
-            type="text" 
-            id="student-id" 
-            name="student-id" 
-            value={studentId} 
-            onChange={(e) => setStudentId(e.target.value)}
-          />
+            <div className="form-row">
+              <label htmlFor="student-id">학번</label>
+              <input
+                  type="text"
+                  id="student-id"
+                  name="student-id"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+              />
+            </div>
+
+            <div className="form-row">
+              <label htmlFor="password">비밀번호</label>
+              <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Sign In
+            </button>
+
+            <div className="signup-link">
+              <span>계정이 없으신가요? </span>
+              <Link to="/signup">회원가입하기</Link>
+            </div>
+          </form>
         </div>
-
-        <div className="form-row">
-          <label htmlFor="password">비밀번호</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <button type="submit" className="submit-btn">
-          Sign In
-        </button>
-
-        <div className="signup-link">
-          <span>계정이 없으신가요? </span>
-          <Link to="/signup">회원가입하기</Link>
-        </div>
-      </form>
-    </div>
+      </div>
   );
 };
 

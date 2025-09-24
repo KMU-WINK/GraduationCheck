@@ -3,27 +3,27 @@ import logo from "../../images/image.png";
 import "../start/start.css";
 
 const Start = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const goToLogin = () => {
-    navigate("/login");
-  };
+    const goToLogin = () => {
+        navigate("/login");
+    };
 
-  const goToSignup = () => {
-    navigate("/signup");
-  };
+    const goToSignup = () => {
+        navigate("/signup");
+    };
 
-  return (
-    <div className="div">
-      <img className="img-logo" src={logo} alt="logo" />
-      <button className="btn" onClick={goToLogin}>
-        Login
-      </button>
-      <button className="btn" onClick={goToSignup}>
-        Sign Up
-      </button>
-    </div>
-  );
+    return (
+        <div className="div">
+            <img className="img-logo" src={logo} alt="logo" />
+            <button className="start-btn" onClick={goToLogin}>
+                Login
+            </button>
+            <button className="start-btn" onClick={goToSignup}>
+                Sign Up
+            </button>
+        </div>
+    );
 };
 
 export default Start;
