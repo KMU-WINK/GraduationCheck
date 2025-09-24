@@ -1,137 +1,97 @@
-/* ===== MyPage: 절대 레이아웃 스킨 (CSS Module) ===== */
+/* ===== MyPage: 절대 레이아웃 스킨 (업데이트) ===== */
 
 .div {
-  background: #ffffff;
-  /* 🔧 고정 폭 + 가운데 정렬 */
-  width: 1440px;
-  margin: 0 auto;
-
-  /* 🔧 절대 좌표 기준 컨테이너 */
-  position: relative;
-  min-height: 1024px;
-
-  /* 🔧 보이는 영역 잘림 방지 (디버깅/PC용) */
-  overflow: visible; /* 원래 hidden이어서 화면 밖으로 나간 요소가 안 보였음 */
-  /* 임시 확인용 테두리: 필요하면 켰다가 끄세요 */
-  /* outline: 1px solid red; */
+  background:#fff;
+  width:1440px;
+  margin:0 auto;
+  position:relative;
+  min-height:1024px;
+  overflow:visible;
 }
 
-
-/*.div {*/
-/*  background: #ffffff;*/
-/*  height: 1024px;*/
-/*  position: relative;*/
-/*  overflow: hidden;*/
-/*}*/
-
-/* 라벨들 */
-.div2,
-.div3,
-.div4,
-.div5,
-.div6,
-.div7,
-.div8 {
-  color: #000000;
-  text-align: left;
-  font-family: "Inter-Regular", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  font-size: 20px;
-  font-weight: 400;
-  position: absolute;
+/* 라벨 */
+.div2,.div3,.div4,.div5, .div6{
+  color:#000;
+  text-align:left;
+  font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:20px; font-weight:400;
+  position:absolute;
 }
 
-.div2 { left: 395px; top: 316px; }  /* 학과 : */
-.div3 { left: 395px; top: 423px; }  /* 학번 : */
-.div4 { left: 395px; top: 530px; }  /* 이름 : */
-.div5 { left: 358px; top: 637px; }  /* 평균학점 : */
-.div6 { left: 376px; top: 744px; }  /* 진행률 : */
-
-.div7 { left: 491px; top: 637px; color:#4d4d4d; } /* 전공 */
-.div8 { left: 767px; top: 637px; color:#4d4d4d; } /* 전체 */
-
-/* 값 박스들(사각형) */
-.rectangle-8,
-.rectangle-11,
-.rectangle-12,
-.rectangle-13,
-.rectangle-14,
-.rectangle-15,
-.rectangle-16 {
-  background: #e9eefc;
-  border-radius: 10px;
-  border: 1px solid #d9d9d9;
-  position: absolute;
-
-  /* 텍스트가 박스 안에 잘 보이도록 */
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  color: #000;
-  font-family: "Inter-Regular", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  font-size: 20px;
-  font-weight: 400;
+.div7,.div8{
+  color:#000;
+  text-align:left;
+  font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:15px; font-weight:400;
+  position:absolute;
 }
 
-.rectangle-8  { width: 530px; height: 56px; left: 464px; top: 300px; } /* 학과 값 */
-.rectangle-11 { width: 260px; height: 56px; left: 464px; top: 407px; } /* 학번 값(좌) */
-.rectangle-14 { width: 260px; height: 56px; left: 734px; top: 407px; } /* 입학년도 값(우) */
-.rectangle-12 { width: 530px; height: 56px; left: 464px; top: 514px; } /* 이름 값 */
-.rectangle-15 { width: 260px; height: 56px; left: 464px; top: 621px; } /* 평균학점(좌) */
-.rectangle-16 { width: 260px; height: 56px; left: 734px; top: 621px; } /* 추가필드(우, 필요 시) */
-.rectangle-13 { width: 530px; height: 56px; left: 464px; top: 728px; } /* 진행률 텍스트/게이지 */
+.div2{ left:395px; top:316px; }   /* 학과 : */
+.div3{ left:395px; top:423px; }   /* 학번 : */
+.div4{ left:395px; top:530px; }
+.div5{ left:395px; top:635px; }   /* 이름 : */
+.div6{ left:376px; top:744px; }   /* 진행률 : */
+
+/* 평균학점 작은 라벨 (전공/과목) */
+.div7{ left:464px; top:595px; color:#4d4d4d; } /* 전공 */
+.div8{ left:734px; top:595px; color:#4d4d4d; } /* 과목 */
+
+/* 값 박스 공통 */
+.rectangle-8,.rectangle-11,.rectangle-12,.rectangle-13,.rectangle-14,.rectangle-15,.rectangle-16{
+  background:#e9eefc;
+  border:1px solid #d9d9d9;
+  border-radius:10px;
+  position:absolute;
+  display:flex; align-items:center;
+  padding:0 16px;
+  color:#000;
+  font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:20px; font-weight:400;
+}
+
+/* ── 행별 배치: 반반(260/260) 고정 ── */
+.rectangle-8  { width:530px; height:56px; left:464px; top:300px; }  /* 학과 */
+
+/* 학번: 왼쪽=입학년도(앞), 오른쪽=뒤 4자리 */
+.rectangle-14 { width:230px; height:56px; left:464px; top:407px; }  /* 입학년도(앞) ← 여기로 이동 */
+.rectangle-11 { width:260px; height:56px; left:734px; top:407px; }  /* 뒤 4자리(뒤) ← 여기로 이동 */
+
+/* 이름 */
+.rectangle-12 { width:530px; height:56px; left:464px; top:514px; }
+
+/* 평균학점: 전공/과목 반반 */
+.rectangle-15 { width:230px; height:56px; left:464px; top:621px; }  /* 전공 평균 */
+.rectangle-16 { width:260px; height:56px; left:734px; top:621px; }  /* 과목 평균 */
+
+/* 진행률: 텍스트 + 막대 컨테이너 (버튼 위) */
+.rectangle-13 {
+  width:530px; height:56px; left:464px; top:728px;
+  display:flex; align-items:center; gap:12px;
+}
+
+/* 진행률 내부 엘리먼트 */
+.progressLabel{ white-space:nowrap; font-weight:500; }
+.progressBar{ flex:1; height:10px; background:#dfe6fb; border-radius:6px; overflow:hidden; border:1px solid #cdd6fb; }
+.progressFill{ height:100%; background:#658cf6; border-radius:6px; width:0%; transition:width 240ms ease; }
 
 /* 제목 */
-.my-page {
-  color: #000000;
-  text-align: left;
-  font-family: "Inter-Regular", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  font-size: 40px;
-  font-weight: 400;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%); /* translate: -50% 대신 호환성 좋은 방식 */
-  top: 132px;
+.my-page{
+  color:#000; text-align:left; font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:40px; font-weight:400; position:absolute; left:50%; transform:translateX(-50%); top:132px;
 }
 
-/* 버튼(파란 사각형 + 텍스트) */
-.rectangle-112 {
-  background: #658cf6;
-  border-radius: 10px;
-  border: 1px solid #d9d9d9;
-  width: 150px;
-  height: 56px;
-  position: absolute;
-  left: calc(50% - -124px); /* 원본 유지 */
-  top: 835px;
-  cursor: pointer;
+/* 수정하기 버튼(원형식 유지) */
+.rectangle-112{
+  background:#658cf6; border:1px solid #d9d9d9; border-radius:10px;
+  width:150px; height:56px; position:absolute; left:calc(50% - -124px); top:835px; cursor:pointer;
+}
+.div9{
+  color:#fff; text-align:left; font-family:"Inter-SemiBold",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:20px; font-weight:600; position:absolute; left:882px; top:851px; cursor:pointer;
 }
 
-.div9 {
-  color: #ffffff;
-  text-align: left;
-  font-family: "Inter-SemiBold", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  position: absolute;
-  left: 882px;
-  top: 851px;
-  cursor: pointer;
+/* 닫기(X) */
+.div10{
+  color:#000; text-align:left; font-family:"Inter-SemiBold",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:64px; font-weight:600; position:absolute; left:1326px; top:44px; cursor:pointer;
 }
-
-/* 닫기 아이콘 */
-.div10 {
-  color: #000000;
-  text-align: left;
-  font-family: "Inter-SemiBold", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  font-size: 64px;
-  font-weight: 600;
-  position: absolute;
-  left: 1326px;
-  top: 44px;
-  cursor: pointer;
-}
-
-/* (선택) 진행률 막대가 필요하면 .rectangle-13 내부에 아래 구조로 넣을 수 있어요
-.progressBar { width: 100%; height: 8px; background:#dfe6fb; border-radius: 4px; }
-.progressBarFill { height: 8px; background:#658cf6; border-radius: 4px; }
-*/

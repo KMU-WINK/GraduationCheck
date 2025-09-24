@@ -1,4 +1,4 @@
-/* ===== EditPage: 절대 좌표 스킨 ===== */
+/* ===== EditPage: 절대 좌표 스킨 (업데이트) ===== */
 
 .div, .div * { box-sizing: border-box; }
 
@@ -25,7 +25,7 @@
 }
 
 /* 라벨 */
-.labelDept,.labelSid,.labelName,.labelAvg {
+.labelDept,.labelSid,.labelName,.labelAvg,.labelProgress {
   color:#000;
   text-align:left;
   font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
@@ -33,10 +33,11 @@
   font-weight:400;
   position:absolute;
 }
-.labelDept { left:395px; top:316px; } /* 학과 : */
-.labelSid  { left:395px; top:423px; } /* 학번 : */
-.labelName { left:395px; top:530px; } /* 이름 : */
-.labelAvg  { left:358px; top:637px; } /* 평균학점 : */
+.labelDept    { left:395px; top:316px; } /* 학과 : */
+.labelSid     { left:395px; top:423px; } /* 학번 : (앞/뒤 4자리) */
+.labelName    { left:395px; top:530px; } /* 이름 : */
+.labelAvg     { left:395px; top:637px; } /* 평균학점 : (전공/과목) */
+.labelProgress{ left:377px; top:744px; } /* 진행률 : */
 
 /* 입력 박스 공통 (반드시 .box + 개별 위치클래스를 함께 사용) */
 .box{
@@ -46,13 +47,29 @@
   width:530px; height:56px; /* 기본값 (개별에서 덮어씀) */
 }
 
-/* 위치/크기 */
-.boxDept { left:464px; top:300px; width:530px; height:56px; } /* 학과 */
-.boxSid  { left:464px; top:407px; width:260px; height:56px; } /* 학번(읽기) */
-.boxYear { left:734px; top:407px; width:260px; height:56px; } /* 입학년도 */
-.boxName { left:464px; top:514px; width:530px; height:56px; } /* 이름 */
-.boxAvg  { left:464px; top:621px; width:260px; height:56px; } /* 평균학점 */
-/* .boxExtra { left:734px; top:621px; width:260px; height:56px; } */
+/* ───────── 행 별 위치/크기 ───────── */
+
+/* 학과 (단일 칸) */
+.boxDept { left:464px; top:300px; width:530px; height:56px; }
+
+/* 학번 (2칸: 반반) */
+.boxSid        { left:464px; top:407px; width:260px; height:56px; } /* 앞칸: 입학년도(셀렉트) */
+.boxSidSuffix  { left:734px; top:407px; width:260px; height:56px; } /* 뒷칸: 숫자 4자리 */
+
+/* 이름 (단일 칸) */
+.boxName { left:464px; top:514px; width:530px; height:56px; }
+
+/* 평균학점 (2칸: 반반) */
+.boxMajorAvg    { left:464px; top:621px; width:260px; height:56px; } /* 전공 평균 */
+.boxSubjectAvg  { left:734px; top:621px; width:260px; height:56px; } /* 과목 평균 */
+
+/* 진행률 (단일 칸) */
+.boxProgress { left:464px; top:728px; width:530px; height:56px; }
+
+/* (구버전 호환: 사용하지 않음)
+.boxAvg  { left:464px; top:621px; width:260px; height:56px; }
+.boxYear { left:734px; top:407px; width:260px; height:56px; }
+*/
 
 /* 실제 입력 UI가 전체를 채워 원래 색(#e9eefc)로 꽉 차게 */
 .input,.select{
@@ -76,6 +93,30 @@
   position:absolute;
   left:464px; top:260px;
   color:#dc2626; font-size:16px;
+}
+
+/* 전공 평균 라벨 */
+.labelMajorAvg {
+  color:#000;
+  text-align:left;
+  font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:15px;
+  font-weight:400;
+  position:absolute;
+  left:464px;   /* boxMajorAvg와 좌측 맞춤 */
+  top:595px;    /* boxMajorAvg 위쪽으로 약 32px 올림 */
+}
+
+/* 과목 평균 라벨 */
+.labelSubjectAvg {
+  color:#000;
+  text-align:left;
+  font-family:"Inter-Regular",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:15px;
+  font-weight:400;
+  position:absolute;
+  left:734px;   /* boxSubjectAvg와 좌측 맞춤 */
+  top:595px;    /* boxSubjectAvg 위쪽으로 같은 라인 */
 }
 
 /* 버튼 */
